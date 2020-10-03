@@ -16,7 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static("public"));
 
-
+// Get existing notes
 app.get("/api/notes", (req, res) => {
     fs.readFile("./db/db.json", "utf-8", (err, data) => {
         if (err) {
@@ -34,13 +34,6 @@ app.get("/api/notes", (req, res) => {
 // POST route
 app.post("/api/notes", function(req, res) {
     console.log(req.body);
-    // if (!req.body.title || !req.body.text) {
-    //     return res.status(400).json({
-    //         error: true,
-    //         data: null,
-    //         message: "Invalid note.  Please reformat and try again."
-    //     })
-    // }
     fs.readFile("./db/db.json", "utf-8", (err, data) => {
         if (err) {
             console.log(err);
@@ -98,12 +91,12 @@ app.delete("/api/notes/:id", function(req, res) {
     });
 });
 
-// Routes
+
 // Basic route that sends the user first to the AJAX Page
 app.get("/", function(req, res) {
     res.sendFile(path.join(__dirname, "./public/index.html"));
 });
-  
+// Route that sends user to the notes page
 app.get("/notes", function(req, res) {
     res.sendFile(path.join(__dirname, "./public/notes.html"));
 });
