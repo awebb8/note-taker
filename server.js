@@ -27,22 +27,6 @@ app.get("/api/notes", (req, res) => {
                 message: "Unable to retrieve notes."
             });
         }
-        // console.log(data);
-        // const updatedData = JSON.parse(data);
-        // // req.body.id = uuidv4();
-        // updatedData.push(req.body);
-        // console.log(updatedData);
-        // fs.writeFile("./db/db.json", JSON.stringify(updatedData), (err) => {
-        //     if (err) {
-        //         console.log(err);
-        //         return res.status(500).json({
-        //             error: true,
-        //             data: null,
-        //             message: "Unable to save new note."
-        //         });
-        //     };
-        //     res.json(updatedData);
-        // });
         res.json(JSON.parse(data));
     });
 });
@@ -85,24 +69,34 @@ app.post("/api/notes", function(req, res) {
     });
 });
 
-// delete a note
-// app.delete("/api/notes/:id", function(req, res) {
-//     fs.readFile("./db/db.json", "utf-8", (err, data) => {
-//         if (err) {
-//             console.log(err);
-//             return res.status(500).json({
-//                 error: true,
-//                 data: null,
-//                 message: "Unable to save new note."
-//             });
-//         }
-//         deleteNote = (JSON.parse(data)).filter(function(data) {
-//             return data.id != req.params.id;
-//         });
-
-//         res.json(updatedData);
-//     });
-// });
+// Delete a note
+app.delete("/api/notes/:id", function(req, res) {
+    fs.readFile("./db/db.json", "utf-8", (err, data) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).json({
+                error: true,
+                data: null,
+                message: "Unable to retrieve note."
+            });
+        }
+        const updatedData = (JSON.parse(data)).filter(function(data) {
+            return data.id != req.params.id;
+        });
+        console.log(updatedData);
+        fs.writeFile("./db/db.json", JSON.stringify(updatedData), (err) => {
+            if (err) {
+                console.log(err);
+                return res.status(500).json({
+                    error: true,
+                    data: null,
+                    message: "Unable to delete note."
+                });
+            }
+            res.json(updatedData);
+        });
+    });
+});
 
 // Routes
 // Basic route that sends the user first to the AJAX Page
